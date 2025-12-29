@@ -683,9 +683,8 @@ function TDS:Addons(options)
 end
 
 if game_state == "GAME" then
-    local success = TDS:Addons()
-    if not success then
-        game:GetService("Players").LocalPlayer:Kick("Failed to enter a key in time, or your executor is trash.")
+    if not TDS:Addons() then
+        game:GetService("Players").LocalPlayer:Kick("Failed to load addons.")
     end
 end
 
