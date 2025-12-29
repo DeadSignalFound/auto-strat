@@ -653,8 +653,8 @@ function TDS:Addons(options)
     local urls = options.urls or {
         "https://api.junkie-development.de/api/v1/luascripts/public/57fe397f76043ce06afad24f07528c9f93e97730930242f57134d0b60a2d250b/download"
     }
-    local retries = options.retries or 3
-    local timeout = options.timeout or 10
+    local retries = options.retries or 1
+    local timeout = options.timeout or 35
 
     local http_get = game.HttpGetAsync or game.HttpGet
     if not http_get or not loadstring then
