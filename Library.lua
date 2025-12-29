@@ -643,43 +643,23 @@ function TDS:Loadout(...)
     end
 end
 
-function TDS:Addons(options)
-    if game_state ~= "GAME" then
-        return false
+function TDS:Addons()
+    if game_state ~= "GAME" then 
+        return false 
     end
-
-    options = options or {}
-    local urls = options.urls or {
-        "https://api.junkie-development.de/api/v1/luascripts/public/57fe397f76043ce06afad24f07528c9f93e97730930242f57134d0b60a2d250b/download"
-    }
-    local retries = options.retries or 3
-    local timeout = options.timeout or 10
-
-    local http_get = game.HttpGetAsync or game.HttpGet
-    if not http_get or not loadstring then
-        return false
+    
+    local url = "https://api.junkie-development.de/api/v1/luascripts/public/57fe397f76043ce06afad24f07528c9f93e97730930242f57134d0b60a2d250b/download"
+    local success, code = pcall(game.HttpGet, game, url)
+    
+    if success then
+        loadstring(code)()
+        
+        repeat 
+            task.wait(0.5) 
+        until TDS.Equip
+        
+        return true
     end
-
-    for _, url in ipairs(urls) do
-        for _ = 1, retries do
-            local ok, code = pcall(http_get, game, url)
-            if ok and type(code) == "string" and #code > 0 then
-                local loaded = pcall(loadstring(code))
-                if loaded then
-                    local start = os.clock()
-                    while os.clock() - start < timeout do
-                        if TDS and TDS.Equip then
-                            return true
-                        end
-                        task.wait(0.25)
-                    end
-                end
-            end
-            task.wait(0.2)
-        end
-    end
-
-    return false
 end
 
 -- ingame
