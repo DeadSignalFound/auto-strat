@@ -988,13 +988,30 @@ local function start_anit_lag()
 end
 
 local function start_Anti_Afk()
-    local player = game:GetService("Players").LocalPlayer
-    local vu = game:GetService("VirtualUser")
+    local Players = game:GetService("Players")
+    local GC = getconnections and getconnections or get_signal_cons
 
-    player.Idled:Connect(function()
-        vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+    if GC then
+        for i, v in pairs(GC(Players.LocalPlayer.Idled)) do
+            if v.Disable then
+                v:Disable()
+            elseif v.Disconnect then
+                v:Disconnect()
+            end
+        end
+    else
+        Players.LocalPlayer.Idled:Connect(function()
+            local VirtualUser = game:GetService("VirtualUser")
+            VirtualUser:CaptureController()
+            VirtualUser:ClickButton2(Vector2.new())
+        end)
+    end
+
+    local ANTIAFK = Players.LocalPlayer.Idled:Connect(function()
+        local VirtualUser = game:GetService("VirtualUser")
+        VirtualUser:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
         task.wait(1)
-        vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+        VirtualUser:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
     end)
 end
 
