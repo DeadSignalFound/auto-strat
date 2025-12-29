@@ -989,7 +989,7 @@ local function start_Anti_Afk()
     task.spawn(function()
         local VIM = game:GetService("VirtualInputManager")
         local holdTime = 0.1
-        local idleThreshold = 60 
+        local idleThreshold = 120
         local player = game:GetService("Players").LocalPlayer
         local lastPosition = player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character.HumanoidRootPart.Position or Vector3.new()
         local lastMoveTime = tick()
