@@ -732,9 +732,8 @@ function TDS:RestartGame()
 end
 
 function TDS:Place(t_name, px, py, pz)
-    if game_state ~= "GAME" then
-        return false 
-    end
+    if game_state ~= "GAME" then return false end
+
     local existing = {}
     for _, child in ipairs(workspace.Towers:GetChildren()) do
         existing[child] = true
@@ -756,105 +755,96 @@ function TDS:Place(t_name, px, py, pz)
         task.wait(0.05)
     until new_t
 
-    self.placed_towers[new_t] = { upgrades = 0 }
-    return new_t
+    table.insert(self.placed_towers, new_t)
+    return #self.placed_towers
 end
 
-function TDS:Upgrade(t_obj, p_id)
-    if self.placed_towers[t_obj] then
-        do_upgrade_tower(t_obj, p_id or 1)
-        self.placed_towers[t_obj].upgrades += 1
+function TDS:Upgrade(idx, p_id)
+    local t = self.placed_towers[idx]
+    if t then
+        do_upgrade_tower(t, p_id or 1)
+        t._upgrades = (t._upgrades or 0) + 1
     end
 end
 
-function TDS:Sell(t_obj, req_wave)
-    if req_wave then
-        repeat task.wait(0.5) until get_current_wave() >= req_wave
-    end
-    if self.placed_towers[t_obj] then
-        if do_sell_tower(t_obj) then
-            self.placed_towers[t_obj] = nil
-            return true
-        end
+function TDS:Sell(idx, req_wave)
+    if req_wave then repeat task.wait(0.5) until get_current_wave() >= req_wave end
+
+    local t = self.placed_towers[idx]
+    if t and do_sell_tower(t) then
+        self.placed_towers[idx] = nil
+        return true
     end
     return false
 end
 
-function TDS:SetTarget(t_obj, target_type, req_wave)
+function TDS:SellAll(req_wave)
+    if req_wave then repeat task.wait(0.5) until get_current_wave() >= req_wave end
+
+    for idx, t in ipairs(self.placed_towers) do
+        if t and do_sell_tower(t) then
+            self.placed_towers[idx] = nil
+        end
+    end
+    return true
+end
+
+function TDS:SetTarget(idx, target_type, req_wave)
     if req_wave then
         repeat task.wait(0.5) until get_current_wave() >= req_wave
     end
-    if not self.placed_towers[t_obj] then return end
+
+    local t = self.placed_towers[idx]
+    if not t then return end
 
     pcall(function()
         remote_func:InvokeServer("Troops", "Target", "Set", {
-            Troop = t_obj,
+            Troop = t,
             Target = target_type
         })
     end)
 end
 
-function TDS:SellAll(req_wave)
-    if req_wave then
-        repeat task.wait(0.5) until get_current_wave() >= req_wave
-    end
-
-    for t_obj, _ in pairs(self.placed_towers) do
-        if do_sell_tower(t_obj) then
-            self.placed_towers[t_obj] = nil
-        end
-    end
-
-    return true
-end
-
-function TDS:Ability(t_obj, name, data, loop)
-    if not self.placed_towers[t_obj] then return false end
-    return do_activate_ability(t_obj, name, data, loop)
+function TDS:Ability(idx, name, data, loop)
+    local t = self.placed_towers[idx]
+    if not t then return false end
+    return do_activate_ability(t, name, data, loop)
 end
 
 function TDS:AutoChain(...)
-    local tower_objs = {...}
-    if #tower_objs == 0 then return end
+    local tower_indices = {...}
+    if #tower_indices == 0 then return end
 
     local running = true
 
     task.spawn(function()
         local i = 1
         while running do
-            local tower = tower_objs[i]
-            if tower and self.placed_towers[tower] then
+            local idx = tower_indices[i]
+            local tower = self.placed_towers[idx]
+
+            if tower then
                 do_activate_ability(tower, "Call to Arms")
             end
 
             local hotbar = player_gui.ReactUniversalHotbar.Frame
             local timescale = hotbar:FindFirstChild("timescale")
-
-            if timescale then
-                if timescale:FindFirstChild("Lock") then
-                    task.wait(10.5)
-                else
-                    task.wait(5.5)
-                end
-            else
-                task.wait(10.5)
-            end
-
+            task.wait((timescale and timescale:FindFirstChild("Lock")) and 10.5 or 5.5)
+            
             i += 1
-            if i > #tower_objs then
+            if i > #tower_indices then
                 i = 1
             end
         end
     end)
 
-    return function()
-        running = false
-    end
+    return function() running = false end
 end
 
-function TDS:SetOption(t_obj, name, val, req_wave)
-    if self.placed_towers[t_obj] then
-        return do_set_option(t_obj, name, val, req_wave)
+function TDS:SetOption(idx, name, val, req_wave)
+    local t = self.placed_towers[idx]
+    if t then
+        return do_set_option(t, name, val, req_wave)
     end
     return false
 end
