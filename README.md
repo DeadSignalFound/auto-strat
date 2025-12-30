@@ -51,13 +51,12 @@ _G.Webhook       = "YOUR-WEBHOOK-URL-HERE"
 
 -- [[ INITIALIZE LIBRARY ]]
 local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/DuxiiT/tds-autostrat/refs/heads/main/main.lua"))()
-local TD = loadstring(game:HttpGet("https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Addons/Place.lua"))()
 
 -- [[ START STRATEGY ]]
 -- Example:
 -- TDS:Loadout("Soldier", "Farm")
 -- TDS:Mode("Frost")
--- TDS:GameInfo("Simplicity", {})
+-- TDS:GameInfo("Simplicity", {HiddenEnemies = true})
 
 -- TDS:UnlockTimeScale() <-- You may remove this if you don't want to use timescale tickets
 -- TDS:TimeScale(2) <-- You may remove this if you don't want to use timescale tickets
