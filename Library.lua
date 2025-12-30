@@ -103,6 +103,8 @@ local function get_all_rewards()
         Coins = 0, 
         Gems = 0, 
         XP = 0, 
+        Wave = 0,
+        Level = 0,
         Time = "00:00",
         Status = "UNKNOWN",
         Others = {} 
@@ -127,10 +129,26 @@ local function get_all_rewards()
         end
     end
 
+    local wave_label = local_player.PlayerGui.ReactGameTopGameDisplay:FindFirstChild("Frame")
+        and local_player.PlayerGui.ReactGameTopGameDisplay.Frame:FindFirstChild("wave")
+        and local_player.PlayerGui.ReactGameTopGameDisplay.Frame.wave:FindFirstChild("container")
+        and local_player.PlayerGui.ReactGameTopGameDisplay.Frame.wave.container:FindFirstChild("value")
+
+    if wave_label and wave_label:FindFirstChild("textLabel") then
+        local wave_txt = wave_label.textLabel.Text
+        local wave_num = tonumber(wave_txt:match("^(%d+)")) or 0
+        results.Wave = wave_num
+    end
+
     local top_banner = rewards_screen and rewards_screen:FindFirstChild("RewardBanner")
     if top_banner and top_banner:FindFirstChild("textLabel") then
         local txt = top_banner.textLabel.Text:upper()
         results.Status = txt:find("TRIUMPH") and "WIN" or (txt:find("LOST") and "LOSS" or "UNKNOWN")
+    end
+
+    local level_value = local_player.Level
+    if level_value then
+        results.Level = level_value.Value or 0
     end
 
     local section_rewards = rewards_screen and rewards_screen:FindFirstChild("RewardsSection")
@@ -210,9 +228,13 @@ local function handle_post_match()
         embeds = {{
             title = (match.Status == "WIN" and "🏆 TRIUMPH" or "💀 DEFEAT"),
             color = (match.Status == "WIN" and 0x2ecc71 or 0xe74c3c),
-            description = "### 📋 Match Overview\n" ..
-                          "> **Status:** `" .. match.Status .. "`\n" ..
-                          "> **Time:** `" .. match.Time .. "`",
+            description =
+                "### 📋 Match Overview\n" ..
+                "> **Status:** `" .. match.Status .. "`\n" ..
+                "> **Time:** `" .. match.Time .. "`\n" ..
+                "> **Current Level:** `" .. match.Level .. "`\n" ..
+                "> **Waves:** `" .. match.Wave .. "`\n",
+                
             fields = {
                 {
                     name = "✨ Rewards",
