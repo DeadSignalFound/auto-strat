@@ -740,7 +740,9 @@ function TDS:Place(t_name, px, py, pz)
     end
     local existing = {}
     for _, child in ipairs(workspace.Towers:GetChildren()) do
-        existing[child] = true
+        if child.Owner.Value == local_player.UserId then
+            existing[child] = true
+        end
     end
 
     do_place_tower(t_name, Vector3.new(px, py, pz))
@@ -748,9 +750,11 @@ function TDS:Place(t_name, px, py, pz)
     local new_t
     repeat
         for _, child in ipairs(workspace.Towers:GetChildren()) do
-            if not existing[child] then
-                new_t = child
-                break
+            if child.Owner.Value == local_player.UserId then
+                if not existing[child] then
+                    new_t = child
+                    break
+                end
             end
         end
         task.wait(0.05)
