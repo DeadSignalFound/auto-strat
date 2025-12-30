@@ -629,7 +629,7 @@ function TDS:Mode(difficulty)
                     })
                 elseif difficulty == "Polluted" then
                     return remote:InvokeServer("Multiplayer", "v2:start", {
-                        mode = "Polluted",
+                        mode = "polluted",
                         count = 1
                     })
                 else
@@ -742,6 +742,9 @@ function TDS:StartGame()
 end
 
 function TDS:Ready()
+    if game_state ~= "GAME" then
+        return false 
+    end
     match_ready_up()
 end
 
@@ -757,9 +760,15 @@ function TDS:Place(t_name, px, py, pz)
     if game_state ~= "GAME" then
         return false 
     end
+    
     local existing = {}
     for _, child in ipairs(workspace.Towers:GetChildren()) do
-        existing[child] = true
+        for _, sub_child in ipairs(child:GetChildren()) do
+            if sub_child.Name == "Owner" and sub_child.Value == local_player.UserId then
+                existing[child] = true
+                break
+            end
+        end
     end
 
     do_place_tower(t_name, Vector3.new(px, py, pz))
@@ -768,9 +777,14 @@ function TDS:Place(t_name, px, py, pz)
     repeat
         for _, child in ipairs(workspace.Towers:GetChildren()) do
             if not existing[child] then
-                new_t = child
-                break
+                for _, sub_child in ipairs(child:GetChildren()) do
+                    if sub_child.Name == "Owner" and sub_child.Value == local_player.UserId then
+                        new_t = child
+                        break
+                    end
+                end
             end
+            if new_t then break end
         end
         task.wait(0.05)
     until new_t
@@ -851,10 +865,10 @@ function TDS:AutoChain(...)
         local i = 1
         while running do
             local idx = tower_indices[i]
-            local tower = self.placed_towers[idx]
+            local tower = TDS.placed_towers[idx]
 
             if tower then
-                do_activate_ability(tower, "Call to Arms")
+                do_activate_ability(tower, "Call Of Arms")
             end
 
             local hotbar = player_gui.ReactUniversalHotbar.Frame

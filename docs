@@ -36,7 +36,7 @@ Description: Triggers special abilities. Set 'loop' to true for auto-spam.
 Usage: TDS:Ability(index, "AbilityName", dataTable, loop)
 
 • Commander:
-  - "Call to Arms" (No data)
+  - "Call Of Arms" (No data)
   - "Support Caravan" (No data)
 
 • DJ Booth:
