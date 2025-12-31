@@ -1,3 +1,29 @@
+local Towers = {
+    "Scout","Sniper","Paintballer","Demoman","Hunter","Soldier","Militant",
+    "Freezer","Assassin","Shotgunner","Pyromancer","Ace Pilot","Medic","Farm",
+    "Rocketeer","Trapper","Military Base","Crook Boss",
+    "Electroshocker","Commander","Warden","Cowboy","DJ Booth","Minigunner",
+    "Ranger","Pursuit","Gatling Gun","Turret","Mortar","Mercenary Base",
+    "Brawler","Necromancer","Accelerator","Engineer","Hacker",
+    "Gladiator","Commando","Slasher","Frost Blaster","Archer","Swarmer",
+    "Toxic Gunner","Sledger","Executioner","Elf Camp","Jester","Cryomancer",
+    "Hallow Punk","Harvester","Snowballer","Elementalist",
+    "Firework Technician","Biologist","Warlock","Spotlight Tech","Mecha Base"
+}
+
+local function normalize(str)
+    return string.lower(str):gsub("%s+", "")
+end
+
+local function resolveTower(input)
+    local n = normalize(input)
+    for _, tower in ipairs(Towers) do
+        if normalize(tower):find(n, 1, true) then
+            return tower
+        end
+    end
+end
+
 local TDS = {}
 shared.TDS_Table = TDS
 
@@ -5,7 +31,7 @@ local function identify_game_state()
     local players = game:GetService("Players")
     local temp_player = players.LocalPlayer or players.PlayerAdded:Wait()
     local temp_gui = temp_player:WaitForChild("PlayerGui")
-    
+
     while true do
         if temp_gui:FindFirstChild("LobbyGui") then
             return "LOBBY"
@@ -23,8 +49,9 @@ function TDS:Addons()
         return false
     end
 
-    local url = "https://api.junkie-development.de/api/v1/luascripts/public/57fe397f76043ce06afad24f07528c9f93e97730930242f57134d0b60a2d250b/download"
-    local success, code = pcall(game.HttpGet, game, url)
+    local success, code = pcall(game.HttpGet, game,
+        "https://api.junkie-development.de/api/v1/luascripts/public/57fe397f76043ce06afad24f07528c9f93e97730930242f57134d0b60a2d250b/download"
+    )
     if not success then
         return false
     end
@@ -32,7 +59,7 @@ function TDS:Addons()
     loadstring(code)()
 
     while not TDS.Equip do
-        task.wait(0.1)
+        task.wait()
     end
 
     return true
@@ -44,25 +71,21 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 
--- Create GUI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "EquipTowerGUI"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = PlayerGui
 
 local frame = Instance.new("Frame")
-frame.Name = "MainFrame"
 frame.Size = UDim2.new(0, 200, 0, 100)
 frame.Position = UDim2.new(0, 10, 0, 10)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
-frame.Parent = screenGui
 frame.Active = true
 frame.Draggable = true
+frame.Parent = screenGui
 
-local uiCornerFrame = Instance.new("UICorner")
-uiCornerFrame.CornerRadius = UDim.new(0, 4)
-uiCornerFrame.Parent = frame
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 4)
 
 local title = Instance.new("TextLabel")
 title.Text = "Tower Equipper"
@@ -74,28 +97,33 @@ title.TextSize = 20
 title.Parent = frame
 
 local textbox = Instance.new("TextBox")
-textbox.PlaceholderText = "Enter tower name..."
+textbox.PlaceholderText = "Type tower name..."
 textbox.Size = UDim2.new(1, -20, 0, 30)
 textbox.Position = UDim2.new(0, 10, 0, 40)
 textbox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 textbox.TextColor3 = Color3.fromRGB(230, 230, 230)
 textbox.Font = Enum.Font.SourceSans
 textbox.TextSize = 18
-textbox.ClearTextOnFocus = true
-textbox.TextEditable = true
+textbox.ClearTextOnFocus = false
+textbox.Text = ""
 textbox.Parent = frame
 
-local uiCornerTextbox = Instance.new("UICorner")
-uiCornerTextbox.CornerRadius = UDim.new(0, 4)
-uiCornerTextbox.Parent = textbox
+Instance.new("UICorner", textbox).CornerRadius = UDim.new(0, 4)
+
+local buffer = ""
+
+textbox:GetPropertyChangedSignal("Text"):Connect(function()
+    buffer = textbox.Text
+    textbox.Text = ""
+end)
 
 textbox.FocusLost:Connect(function(enterPressed)
-    if enterPressed then
-        local towerName = textbox.Text
-        if towerName ~= "" and TDS.Equip then
-            TDS:Equip(towerName)
-            textbox.Text = ""
+    if enterPressed and TDS.Equip then
+        local tower = resolveTower(buffer)
+        if tower then
+            TDS:Equip(tower)
         end
+        buffer = ""
     end
 end)
 
