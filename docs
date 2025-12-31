@@ -5,12 +5,13 @@
 [ CORE ENGINE METHODS ]
 --------------------------------------------------------------------------------
 TDS:Place(name, x, y, z)    -> Places tower, returns index.
-TDS:Equip(name)              -> Equips tower by name.
+TDS:Equip(name)             -> Equips tower by name.
 TDS:Upgrade(idx, path)      -> Upgrades tower at index (path 1 or 2).
 TDS:Sell(idx)               -> Sells tower at index.
 TDS:SetTarget(idx, mode)    -> Targeting: "First", "Strong", "Last", "Random".
 TDS:UseTimeScale(val)       -> Sets speed: 0.5, 1, 1.5, or 2.
 TDS:GameInfo(map, modifiers)       -> Selects the desired Map and Modifiers
+TDS:VoteSkip(start_wave, end_wave) -> Vote to skip on the wave of your choice. Ex: TDS:VoteSkip(1) or TDS:VoteSkip(1,5)
 Modifiers:
 HiddenEnemies = true, Glass = true, ExplodingEnemies = true, Limitation = true, Committed = true, HealthyEnemies = true, SpeedyEnemies = true, Quarantine = true, Fog = true, FlyingEnemies = true, Broke = true, Jailed = true, Inflation = true
 

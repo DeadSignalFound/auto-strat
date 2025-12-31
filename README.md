@@ -63,6 +63,8 @@ local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/DuxiiT/td
 
 --TDS:Place("Soldier", 10, 10, 10)
 --TDS:Equip("Scout")
+--TDS:VoteSkip(1, 5)
+--TDS:VoteSkip(1)
 ```
 
 > [!IMPORTANT]
