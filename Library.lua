@@ -790,7 +790,14 @@ function TDS:RestartGame()
     trigger_restart()
 end
 
-function TDS:Place(t_name, px, py, pz)
+function TDS:Place(t_name, px, py, pz, ...)
+    local args = {...}
+    local stack = false
+
+    if args[#args] == "stack" or args[#args] == true then
+        py = 95
+    end
+
     if game_state ~= "GAME" then
         return false 
     end
