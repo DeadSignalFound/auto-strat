@@ -2,6 +2,7 @@ if not game:IsLoaded() then game.Loaded:Wait() end
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Sources/GuiSource.lua"))()
 local Console = shared.AutoStratGUI.Console
+local bckpattern = shared.AutoStratGUI.bckpattern
 
 local function identify_game_state()
     local players = game:GetService("Players")
@@ -157,6 +158,20 @@ local function log(text, color)
     Console.CanvasSize = UDim2.new(0,0,0,Console.UIListLayout.AbsoluteContentSize.Y)
     Console.CanvasPosition = Vector2.new(0, Console.CanvasSize.Y.Offset)
 end
+
+local ToggleButton = Instance.new("TextButton", TDS)
+ToggleButton.Size = UDim2.new(0, 100, 0, 30)
+ToggleButton.Position = UDim2.new(0, 10, 1, -40)
+ToggleButton.Text = "Toggle GUI"
+ToggleButton.Font = Enum.Font.GothamBold
+ToggleButton.TextSize = 14
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 150, 255)
+Instance.new("UICorner", ToggleButton).CornerRadius = UDim.new(0, 6)
+
+ToggleButton.MouseButton1Click:Connect(function()
+    bckpattern.Visible = not bckpattern.Visible
+end)
 
 -- // currency tracking
 local start_coins, current_total_coins, start_gems, current_total_gems = 0, 0, 0, 0
