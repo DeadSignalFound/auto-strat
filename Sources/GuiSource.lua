@@ -48,9 +48,9 @@ Tab1.Parent = bckpattern
 Tab1.BackgroundTransparency = 1
 Tab1.Size = UDim2.new(1, 0, 1, 0)
 
--- Console frame (darker)
+-- Console frame
 Consoleframe.Parent = Tab1
-Consoleframe.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+Consoleframe.BackgroundColor3 = Color3.fromRGB(13, 13, 13)
 Consoleframe.BorderSizePixel = 0
 Consoleframe.Position = UDim2.new(0.045, 0, 0.17, 0)
 Consoleframe.Size = UDim2.new(0.91, 0, 0.78, 0)
