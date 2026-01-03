@@ -1,8 +1,5 @@
 if not game:IsLoaded() then game.Loaded:Wait() end
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Sources/GuiSource.lua"))()
-local Console = shared.AutoStratGUI.Console
-
 local function identify_game_state()
     local players = game:GetService("Players")
     local temp_player = players.LocalPlayer or players.PlayerAdded:Wait()
@@ -43,8 +40,8 @@ local auto_pickups_running = false
 local auto_skip_running = false
 local anti_lag_running = false
 
-local MaxLogs = 35
-local Logs = {}
+local log_table = {}
+local max_logs = 100
 
 local ColorMap = {
     green = "#2BFFAE",
@@ -91,8 +88,15 @@ local upgrade_history = {}
 -- // shared for addons
 shared.TDS_Table = TDS
 
--- // console logging helpers
-local function classifyColor(text)
+
+-- // ui
+loadstring(game:HttpGet("https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Sources/GuiSource.lua"))()
+local Console = shared.AutoStratGUI.Console
+
+shared.AutoStratGUI.Status(tostring(game_state))
+
+-- // console
+local function classify_color(text)
     local t = text:lower()
 
     if t:find("error")
@@ -126,36 +130,41 @@ end
 
 -- // console logging
 local function log(text, color)
-    color = color or classifyColor(text)
-    local hex = ColorMap[color] or ColorMap.green
-    local formatted = "<font color='" .. hex .. "'>" .. text .. "</font>"
+    color = color or (classify_color and classify_color(text))
+    local hex = (ColorMap and ColorMap[color]) or "#00ff96"
+    local timestamp = os.date("%H:%M:%S")
+    
+    local formatted_text = string.format("<font color='#555564'>[%s]</font> <font color='%s'>%s</font>", timestamp, hex, text)
 
-    local ConsoleLogExample = Instance.new("TextLabel")
-    ConsoleLogExample.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    ConsoleLogExample.BackgroundTransparency = 1
-    ConsoleLogExample.BorderSizePixel = 0
-    ConsoleLogExample.Size = UDim2.new(1, -8, 0, 0) -- initial height 0
-    ConsoleLogExample.Font = Enum.Font.SourceSansSemibold
-    ConsoleLogExample.RichText = true
-    ConsoleLogExample.Text = formatted
-    ConsoleLogExample.TextSize = 14
-    ConsoleLogExample.TextWrapped = true
-    ConsoleLogExample.TextXAlignment = Enum.TextXAlignment.Left
-    ConsoleLogExample.TextYAlignment = Enum.TextYAlignment.Top
-    ConsoleLogExample.TextColor3 = Color3.fromRGB(255,255,255)
-    ConsoleLogExample.AutomaticSize = Enum.AutomaticSize.Y -- automatically size vertically
-    ConsoleLogExample.Parent = Console
+    local log_entry = Instance.new("TextLabel")
+    log_entry.Name = "LogEntry"
+    log_entry.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    log_entry.BackgroundTransparency = 1
+    log_entry.BorderSizePixel = 0
+    log_entry.Size = UDim2.new(1, -8, 0, 0)
+    log_entry.Font = Enum.Font.SourceSansSemibold
+    log_entry.RichText = true
+    log_entry.Text = formatted_text
+    log_entry.TextSize = 14
+    log_entry.TextWrapped = true
+    log_entry.TextXAlignment = Enum.TextXAlignment.Left
+    log_entry.TextYAlignment = Enum.TextYAlignment.Top
+    log_entry.TextColor3 = Color3.fromRGB(255, 255, 255)
+    log_entry.AutomaticSize = Enum.AutomaticSize.Y
+    log_entry.Parent = console_scrolling
 
-    table.insert(Logs, ConsoleLogExample)
+    table.insert(log_table, log_entry)
 
-    if #Logs > MaxLogs then
-        Logs[1]:Destroy()
-        table.remove(Logs, 1)
+    if #log_table > max_logs then
+        log_table[1]:Destroy()
+        table.remove(log_table, 1)
     end
 
     task.wait()
-    Console.CanvasSize = UDim2.new(0,0,0,Console.UIListLayout.AbsoluteContentSize.Y)
-    Console.CanvasPosition = Vector2.new(0, Console.CanvasSize.Y.Offset)
+    if console_scrolling:FindFirstChildOfClass("UIListLayout") then
+        console_scrolling.CanvasSize = UDim2.new(0, 0, 0, log_layout.AbsoluteContentSize.Y)
+        console_scrolling.CanvasPosition = Vector2.new(0, console_scrolling.CanvasSize.Y.Offset)
+    end
 end
 
 -- // currency tracking
