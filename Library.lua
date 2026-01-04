@@ -366,7 +366,7 @@ local function handle_post_match()
 
     pcall(function()
         send_request({
-            Url = _G.Webhook,
+            Url = _G.WebhookURL,
             Method = "POST",
             Headers = { ["Content-Type"] = "application/json" },
             Body = game:GetService("HttpService"):JSONEncode(post_data)
@@ -380,8 +380,8 @@ end
 
 local function log_match_start()
     if not _G.SendWebhook then return end
-    if type(_G.Webhook) ~= "string" or _G.Webhook == "" then return end
-    if _G.Webhook:find("YOUR%-WEBHOOK") then return end
+    if type(_G.WebhookURL) ~= "string" or _G.WebhookURL == "" then return end
+    if _G.WebhookURL:find("YOUR%-WEBHOOK") then return end
     
     local start_payload = {
         username = "TDS AutoStrat",
@@ -413,7 +413,7 @@ local function log_match_start()
 
     pcall(function()
         send_request({
-            Url = _G.Webhook,
+            Url = _G.WebhookURL,
             Method = "POST",
             Headers = { ["Content-Type"] = "application/json" },
             Body = game:GetService("HttpService"):JSONEncode(start_payload)
