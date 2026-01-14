@@ -972,10 +972,16 @@ function TDS:GameInfo(name, list)
     if marketplace_service:UserOwnsGamePassAsync(local_player.UserId, 10518590) then
         select_map_override(name, "vip")
         log("Selected map: " .. name, "green")
+        repeat task.wait(1) until player_gui:FindFirstChild("ReactUniversalHotbar") -- waits for the game to load
+        return true 
     elseif is_map_available(name) then
         select_map_override(name)
+        repeat task.wait(1) until player_gui:FindFirstChild("ReactUniversalHotbar") -- waits for the game to load again
+        return true
     else
+        log("Map '" .. name .. "' not available, rejoining...", "red") -- Logger
         teleport_service:Teleport(3260590327, local_player)
+        repeat task.wait(9999) until false -- waits until 2050 instead of wasting timescale tickets/phantom placing/upgrading/selling towers
     end
 end
 
