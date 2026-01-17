@@ -1336,7 +1336,7 @@ local function start_anti_afk()
         overlay.ChildAdded:Connect(function(child)
             if child.Name == 'ErrorPrompt' then
                 while true do
-                    teleport_service:Teleport(game.PlaceId, local_player)
+                    teleport_service:Teleport(3260590327)
                     task.wait(5)
                 end
             end
@@ -1349,7 +1349,7 @@ local function start_anti_afk()
             task.wait(1)
             lobby_timer = lobby_timer + 1
             if lobby_timer >= 60 then
-                teleport_service:Teleport(3260590327, local_player)
+                teleport_service:Teleport(3260590327)
                 break 
             end
         end
