@@ -256,7 +256,7 @@ function Update:StartLoad()
 end;
 local SettingsLib = {
     SaveSettings = true,
-    LoadAnimation = true
+    LoadAnimation = false
 }
 (getgenv()).LoadConfig = function()
     local path = "ADS/Library/" .. game.Players.LocalPlayer.Name .. ".json"
