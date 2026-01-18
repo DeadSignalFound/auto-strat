@@ -255,53 +255,47 @@ function Update:StartLoad()
 	end);
 end;
 local SettingsLib = {
-	SaveSettings = true,
-	LoadAnimation = true
-};
+    SaveSettings = true,
+    LoadAnimation = true
+}
 (getgenv()).LoadConfig = function()
-	if readfile and writefile and isfile and isfolder then
-		if not isfolder("ADS") then
-			makefolder("ADS");
-		end;
-		if not isfolder("ADS/Library/") then
-			makefolder("ADS/Library/");
-		end;
-		if not isfile(("ADS/Library/" .. game.Players.LocalPlayer.Name .. ".json")) then
-			writefile("ADS/Library/" .. game.Players.LocalPlayer.Name .. ".json", (game:GetService("HttpService")):JSONEncode(SettingsLib));
-		else
-			local Decode = (game:GetService("HttpService")):JSONDecode(readfile("ADS/Library/" .. game.Players.LocalPlayer.Name .. ".json"));
-			for i, v in pairs(Decode) do
-				SettingsLib[i] = v;
-			end;
-		end;
-		print("Library Loaded!");
-	else
-		return warn("Status : Undetected Executor");
-	end;
-end;
+    local path = "ADS/Library/" .. game.Players.LocalPlayer.Name .. ".json"
+    if readfile and isfile and isfolder then
+        if not isfolder("ADS") then makefolder("ADS") end
+        if not isfolder("ADS/Library") then makefolder("ADS/Library") end
+
+        if isfile(path) then
+            local data = readfile(path)
+            local success, decode = pcall(function() return game:GetService("HttpService"):JSONDecode(data) end)
+            
+            if success and type(decode) == "table" then
+                for i, v in pairs(decode) do
+                    SettingsLib[i] = v
+                end
+            end
+        else
+            writefile(path, game:GetService("HttpService"):JSONEncode(SettingsLib))
+        end
+    end
+end
 (getgenv()).SaveConfig = function()
-	if readfile and writefile and isfile and isfolder then
-		if not isfile(("ADS/Library/" .. game.Players.LocalPlayer.Name .. ".json")) then
-			(getgenv()).Load();
-		else
-			local Decode = (game:GetService("HttpService")):JSONDecode(readfile("ADS/Library/" .. game.Players.LocalPlayer.Name .. ".json"));
-			local Array = {};
-			for i, v in pairs(SettingsLib) do
-				Array[i] = v;
-			end;
-			writefile("ADS/Library/" .. game.Players.LocalPlayer.Name .. ".json", (game:GetService("HttpService")):JSONEncode(Array));
-		end;
-	else
-		return warn("Status : Undetected Executor");
-	end;
-end;
-(getgenv()).LoadConfig();
-function Update:SaveSettings()
-	if SettingsLib.SaveSettings then
-		return true;
-	end;
-	return false;
-end;
+    local path = "ADS/Library/" .. game.Players.LocalPlayer.Name .. ".json"
+    if writefile then
+        local data = game:GetService("HttpService"):JSONEncode(SettingsLib)
+        writefile(path, data)
+    end
+end
+getgenv().LoadConfig()
+function Update:Set(key, value)
+    SettingsLib[key] = value
+    getgenv().SaveConfig()
+end
+function Update:Get(key, default)
+    if SettingsLib[key] ~= nil then
+        return SettingsLib[key]
+    end
+    return default
+end
 function Update:LoadAnimation()
 	if SettingsLib.LoadAnimation then
 		return true;
