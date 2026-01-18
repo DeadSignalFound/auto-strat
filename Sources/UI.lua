@@ -133,7 +133,7 @@ function Update:Notify(desc)
 	Title.BackgroundTransparency = 1;
 	Title.Position = UDim2.new(0, 55, 0, 14);
 	Title.Size = UDim2.new(0, 10, 0, 20);
-	Title.Font = Enum.Font.GothamBold;
+	Title.Font = Enum.Font.FredokaOneBold;
 	Title.Text = "ADS";
 	Title.TextColor3 = Color3.fromRGB(255, 255, 255);
 	Title.TextSize = 16;
@@ -143,7 +143,7 @@ function Update:Notify(desc)
 	Desc.BackgroundTransparency = 1;
 	Desc.Position = UDim2.new(0, 55, 0, 33);
 	Desc.Size = UDim2.new(0, 10, 0, 10);
-	Desc.Font = Enum.Font.GothamSemibold;
+	Desc.Font = Enum.Font.FredokaOneSemibold;
 	Desc.TextTransparency = 0.3;
 	Desc.Text = desc;
 	Desc.TextColor3 = Color3.fromRGB(200, 200, 200);
@@ -185,7 +185,7 @@ function Update:StartLoad()
 	local TitleLoader = Instance.new("TextLabel");
 	TitleLoader.Parent = MainLoaderFrame;
 	TitleLoader.Text = "ADS";
-	TitleLoader.Font = Enum.Font.FredokaOne;
+	TitleLoader.Font = Enum.Font.FredokaOneBold;
 	TitleLoader.TextSize = 50;
 	TitleLoader.TextColor3 = Color3.fromRGB(255, 255, 255);
 	TitleLoader.BackgroundTransparency = 1;
@@ -196,7 +196,7 @@ function Update:StartLoad()
 	local DescriptionLoader = Instance.new("TextLabel");
 	DescriptionLoader.Parent = MainLoaderFrame;
 	DescriptionLoader.Text = "Loading..";
-	DescriptionLoader.Font = Enum.Font.Gotham;
+	DescriptionLoader.Font = Enum.Font.FredokaOneBold;
 	DescriptionLoader.TextSize = 15;
 	DescriptionLoader.TextColor3 = Color3.fromRGB(255, 255, 255);
 	DescriptionLoader.BackgroundTransparency = 1;
@@ -371,7 +371,7 @@ function Update:Window(Config)
 	NameHub.Position = UDim2.new(0, 15, 0.5, 0);
 	NameHub.AnchorPoint = Vector2.new(0, 0.5);
 	NameHub.Size = UDim2.new(0, 1, 0, 25);
-	NameHub.Font = Enum.Font.GothamBold;
+	NameHub.Font = Enum.Font.FredokaOneBold;
 	NameHub.Text = "ADS";
 	NameHub.TextSize = 20;
 	NameHub.TextColor3 = Color3.fromRGB(255, 255, 255);
@@ -385,7 +385,7 @@ function Update:Window(Config)
 	SubTitle.BackgroundTransparency = 1;
 	SubTitle.Position = UDim2.new(0, nameHubSize.X + 8, 0.5, 0);
 	SubTitle.Size = UDim2.new(0, 1, 0, 20);
-	SubTitle.Font = Enum.Font.Cartoon;
+	SubTitle.Font = Enum.Font.FredokaOneBold;
 	SubTitle.AnchorPoint = Vector2.new(0, 0.5);
 	SubTitle.Text = Config.SubTitle;
 	SubTitle.TextSize = 15;
@@ -478,7 +478,7 @@ function Update:Window(Config)
 	TitleSettings.BackgroundTransparency = 1;
 	TitleSettings.Position = UDim2.new(0, 20, 0, 15);
 	TitleSettings.Size = UDim2.new(1, 0, 0, 20);
-	TitleSettings.Font = Enum.Font.GothamBold;
+	TitleSettings.Font = Enum.Font.FredokaOneBold;
 	TitleSettings.AnchorPoint = Vector2.new(0, 0);
 	TitleSettings.Text = "Library Settings";
 	TitleSettings.TextSize = 20;
@@ -529,7 +529,7 @@ function Update:Window(Config)
 		Title.BackgroundTransparency = 1;
 		Title.Position = UDim2.new(0, 60, 0.5, 0);
 		Title.Size = UDim2.new(1, -60, 0, 20);
-		Title.Font = Enum.Font.Code;
+		Title.Font = Enum.Font.FredokaOneBold;
 		Title.AnchorPoint = Vector2.new(0, 0.5);
 		Title.Text = title or "";
 		Title.TextSize = 15;
@@ -581,7 +581,7 @@ function Update:Window(Config)
 		Button.BackgroundColor3 = _G.Third;
 		Button.BackgroundTransparency = 0;
 		Button.Size = UDim2.new(0.8, 0, 0, 30);
-		Button.Font = Enum.Font.Code;
+		Button.Font = Enum.Font.FredokaOneBold;
 		Button.Text = title or "Button";
 		Button.AnchorPoint = Vector2.new(0.5, 0);
 		Button.Position = UDim2.new(0.5, 0, 0, 0);
@@ -702,7 +702,7 @@ function Update:Window(Config)
 		TabButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100);
 		TabButton.BackgroundTransparency = 1;
 		TabButton.Size = UDim2.new(1, 0, 0, 35);
-		TabButton.Font = Enum.Font.Nunito;
+		TabButton.Font = Enum.Font.FredokaOneBold;
 		TabButton.TextColor3 = Color3.fromRGB(255, 255, 255);
 		TabButton.TextSize = 12;
 		TabButton.TextTransparency = 0.9;
@@ -722,7 +722,7 @@ function Update:Window(Config)
 		Title.BackgroundTransparency = 1;
 		Title.Position = UDim2.new(0, 30, 0.5, 0);
 		Title.Size = UDim2.new(0, 100, 0, 30);
-		Title.Font = Enum.Font.Roboto;
+		Title.Font = Enum.Font.FredokaOneBold;
 		Title.Text = text;
 		Title.AnchorPoint = Vector2.new(0, 0.5);
 		Title.TextColor3 = Color3.fromRGB(255, 255, 255);
@@ -890,7 +890,7 @@ function Update:Window(Config)
 			TextButton.AnchorPoint = Vector2.new(1, 0.5);
 			TextButton.Position = UDim2.new(1, -1, 0.5, 0);
 			TextButton.Size = UDim2.new(0, 25, 0, 25);
-			TextButton.Font = Enum.Font.Nunito;
+			TextButton.Font = Enum.Font.FredokaOneBold;
 			TextButton.Text = "";
 			TextButton.TextXAlignment = Enum.TextXAlignment.Left;
 			TextButton.TextColor3 = Color3.fromRGB(255, 255, 255);
@@ -902,7 +902,7 @@ function Update:Window(Config)
 			TextLabel.AnchorPoint = Vector2.new(0, 0.5);
 			TextLabel.Position = UDim2.new(0, 20, 0.5, 0);
 			TextLabel.Size = UDim2.new(1, -50, 1, 0);
-			TextLabel.Font = Enum.Font.Cartoon;
+			TextLabel.Font = Enum.Font.FredokaOneBold;
 			TextLabel.RichText = true;
 			TextLabel.Text = text;
 			TextLabel.TextXAlignment = Enum.TextXAlignment.Left;
@@ -956,7 +956,7 @@ function Update:Window(Config)
 			Button.BackgroundColor3 = _G.Primary;
 			Button.BackgroundTransparency = 0.8;
 			Button.AutoButtonColor = false;
-			Button.Font = Enum.Font.SourceSans;
+			Button.Font = Enum.Font.FredokaOneBold;
 			Button.Text = "";
 			Button.TextColor3 = Color3.fromRGB(0, 0, 0);
 			Button.TextSize = 11;
@@ -965,7 +965,7 @@ function Update:Window(Config)
 			Title2.BackgroundColor3 = Color3.fromRGB(150, 150, 150);
 			Title2.BackgroundTransparency = 1;
 			Title2.Size = UDim2.new(1, 0, 0, 35);
-			Title2.Font = Enum.Font.Cartoon;
+			Title2.Font = Enum.Font.FredokaOneBold;
 			Title2.Text = text;
 			Title2.TextColor3 = Color3.fromRGB(255, 255, 255);
 			Title2.TextSize = 15;
@@ -976,7 +976,7 @@ function Update:Window(Config)
 			Desc.BackgroundTransparency = 1;
 			Desc.Position = UDim2.new(0, 0, 0, 22);
 			Desc.Size = UDim2.new(0, 280, 0, 16);
-			Desc.Font = Enum.Font.Gotham;
+			Desc.Font = Enum.Font.FredokaOneBold;
 			if desc then
 				Desc.Text = desc;
 				Title2.Position = UDim2.new(0, 15, 0.5, -5);
@@ -1076,7 +1076,7 @@ function Update:Window(Config)
 			DropTitle.BackgroundColor3 = _G.Primary;
 			DropTitle.BackgroundTransparency = 1;
 			DropTitle.Size = UDim2.new(1, 0, 0, 30);
-			DropTitle.Font = Enum.Font.Cartoon;
+			DropTitle.Font = Enum.Font.FredokaOneBold;
 			DropTitle.Text = text;
 			DropTitle.TextColor3 = Color3.fromRGB(255, 255, 255);
 			DropTitle.TextSize = 15;
@@ -1091,7 +1091,7 @@ function Update:Window(Config)
 			SelectItems.Position = UDim2.new(1, -5, 0, 5);
 			SelectItems.Size = UDim2.new(0, 100, 0, 30);
 			SelectItems.AnchorPoint = Vector2.new(1, 0);
-			SelectItems.Font = Enum.Font.GothamMedium;
+			SelectItems.Font = Enum.Font.FredokaOneMedium;
 			SelectItems.AutoButtonColor = false;
 			SelectItems.TextSize = 9;
 			SelectItems.ZIndex = 1;
@@ -1155,7 +1155,7 @@ function Update:Window(Config)
 				Item.BackgroundColor3 = _G.Primary;
 				Item.BackgroundTransparency = 1;
 				Item.Size = UDim2.new(1, 0, 0, 30);
-				Item.Font = Enum.Font.Nunito;
+				Item.Font = Enum.Font.FredokaOneBold;
 				Item.Text = tostring(v);
 				Item.TextColor3 = Color3.fromRGB(255, 255, 255);
 				Item.TextSize = 13;
@@ -1258,7 +1258,7 @@ function Update:Window(Config)
 				Item.BackgroundColor3 = _G.Primary;
 				Item.BackgroundTransparency = 1;
 				Item.Size = UDim2.new(1, 0, 0, 30);
-				Item.Font = Enum.Font.Nunito;
+				Item.Font = Enum.Font.FredokaOneBold;
 				Item.Text = tostring(t);
 				Item.TextColor3 = Color3.fromRGB(255, 255, 255);
 				Item.TextSize = 13;
@@ -1360,7 +1360,7 @@ function Update:Window(Config)
 			Title.BackgroundTransparency = 1;
 			Title.Position = UDim2.new(0, 15, 0.5, 0);
 			Title.Size = UDim2.new(1, 0, 0, 30);
-			Title.Font = Enum.Font.Cartoon;
+			Title.Font = Enum.Font.FredokaOneBold;
 			Title.Text = text;
 			Title.AnchorPoint = Vector2.new(0, 0.5);
 			Title.TextColor3 = Color3.fromRGB(255, 255, 255);
@@ -1371,7 +1371,7 @@ function Update:Window(Config)
 			ValueText.BackgroundTransparency = 1;
 			ValueText.Position = UDim2.new(0, -38, 0.5, 0);
 			ValueText.Size = UDim2.new(0, 30, 0, 30);
-			ValueText.Font = Enum.Font.GothamMedium;
+			ValueText.Font = Enum.Font.FredokaOneMedium;
 			ValueText.Text = set;
 			ValueText.AnchorPoint = Vector2.new(0, 0.5);
 			ValueText.TextColor3 = Color3.fromRGB(255, 255, 255);
@@ -1464,7 +1464,7 @@ function Update:Window(Config)
 			TextboxLabel.Position = UDim2.new(0, 15, 0.5, 0);
 			TextboxLabel.Text = text;
 			TextboxLabel.Size = UDim2.new(1, 0, 0, 35);
-			TextboxLabel.Font = Enum.Font.Nunito;
+			TextboxLabel.Font = Enum.Font.FredokaOneBold;
 			TextboxLabel.AnchorPoint = Vector2.new(0, 0.5);
 			TextboxLabel.TextColor3 = Color3.fromRGB(255, 255, 255);
 			TextboxLabel.TextSize = 15;
@@ -1477,7 +1477,7 @@ function Update:Window(Config)
 			RealTextbox.Position = UDim2.new(1, -5, 0.5, 0);
 			RealTextbox.AnchorPoint = Vector2.new(1, 0.5);
 			RealTextbox.Size = UDim2.new(0, 80, 0, 25);
-			RealTextbox.Font = Enum.Font.Gotham;
+			RealTextbox.Font = Enum.Font.FredokaOneBold;
 			RealTextbox.Text = "";
 			RealTextbox.TextColor3 = Color3.fromRGB(225, 225, 225);
 			RealTextbox.TextSize = 11;
@@ -1504,7 +1504,7 @@ function Update:Window(Config)
 			Label.BackgroundColor3 = Color3.fromRGB(255, 255, 255);
 			Label.BackgroundTransparency = 1;
 			Label.Size = UDim2.new(1, -30, 0, 30);
-			Label.Font = Enum.Font.Nunito;
+			Label.Font = Enum.Font.FredokaOneBold;
 			Label.Position = UDim2.new(0, 30, 0.5, 0);
 			Label.AnchorPoint = Vector2.new(0, 0.5);
 			Label.TextColor3 = Color3.fromRGB(225, 225, 225);
@@ -1568,7 +1568,7 @@ function Update:Window(Config)
 			Sep2.AnchorPoint = Vector2.new(0.5, 0.5);
 			Sep2.Position = UDim2.new(0.5, 0, 0.5, 0);
 			Sep2.Size = UDim2.new(1, 0, 0, 36);
-			Sep2.Font = Enum.Font.GothamBold;
+			Sep2.Font = Enum.Font.FredokaOneBold;
 			Sep2.Text = text;
 			Sep2.TextColor3 = Color3.fromRGB(255, 255, 255);
 			Sep2.TextSize = 14;
@@ -1638,7 +1638,7 @@ function Update:Window(Config)
             Title.BackgroundTransparency = 1
             Title.Position = UDim2.new(0, 10, 0, 5)
             Title.Size = UDim2.new(1, -20, 0, 20)
-            Title.Font = Enum.Font.GothamBold
+            Title.Font = Enum.Font.FredokaOneBold
             Title.Text = titleText or "LOGS"
             Title.TextColor3 = Color3.fromRGB(255, 255, 255)
             Title.TextSize = 12
