@@ -1,4 +1,4 @@
-local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Library.lua"))()
+local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Test.lua"))()
 
 TDS:Loadout("Farm", "Brawler", "Mercenary Base", "Electroshocker", "Engineer")
 TDS:Mode("Fallen")
