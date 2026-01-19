@@ -1,5 +1,3 @@
-local TDS = loadstring(game:HttpGet("https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Test.lua"))()
-
 TDS:Loadout("Scout") -- Change this to the loadout you are using
 TDS:Mode("Easy") -- Change this to the gamemode you're playing
 TDS:GameInfo("Simplicity", {}) -- Change this to the Map you want
