@@ -663,6 +663,15 @@ local Main = Window:Tab({Title = "Main", Icon = "star"}) do
 
     Main:Section({Title = "Abilities"})
     Main:Toggle({
+        Title = "Enable Path Distance Marker",
+        Desc = "Red = Mercenary Base, Green = Military Baset",
+        Value = _G.PathVisuals,
+        Callback = function(v)
+            set_setting("PathVisuals", v)
+        end
+    })
+
+    Main:Toggle({
         Title = "Auto Mercenary Base",
         Desc = "Uses Air-Drop Ability",
         Value = _G.AutoMercenary,
@@ -988,15 +997,6 @@ local Misc = Window:Tab({Title = "Misc", Icon = "box"}) do
     })
 
     Misc:Toggle({
-        Title = "Enable Path Distance Marker",
-        Desc = "Red = Mercenary Base, Green = Military Baset",
-        Value = _G.PathVisuals,
-        Callback = function(v)
-            set_setting("PathVisuals", v)
-        end
-    })
-
-    Misc:Toggle({
         Title = "Auto Collect Pickups",
         Desc = "Collects Logbooks + Snowballs",
         Value = _G.AutoPickups,
@@ -1018,19 +1018,12 @@ local Misc = Window:Tab({Title = "Misc", Icon = "box"}) do
     Misc:Textbox({
         Title = "Cooldown:",
         Desc = "",
-        Placeholder = "https://discord.com/api/webhooks/...",
+        Placeholder = "0.01",
         Value = _G.Cooldown,
         ClearTextOnFocus = true,
         Callback = function(value)
             if value ~= 0 then
                 set_setting("Cooldown", value)
-                
-                Window:Notify({
-                    Title = "ADS",
-                    Desc = "Cooldown is successfully set!",
-                    Time = 3,
-                    Type = "normal"
-                })
             end
         end
     })
@@ -1038,19 +1031,12 @@ local Misc = Window:Tab({Title = "Misc", Icon = "box"}) do
     Misc:Textbox({
         Title = "Multiply:",
         Desc = "",
-        Placeholder = "https://discord.com/api/webhooks/...",
+        Placeholder = "60",
         Value = _G.Multiply,
         ClearTextOnFocus = true,
         Callback = function(value)
             if value ~= 0 then
                 set_setting("Multiply", value)
-                
-                Window:Notify({
-                    Title = "ADS",
-                    Desc = "Cooldown is successfully set!",
-                    Time = 3,
-                    Type = "normal"
-                })
             end
         end
     })
