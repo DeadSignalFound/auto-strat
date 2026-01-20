@@ -1038,6 +1038,33 @@ local Strategies = Window:Tab({Title = "Strategies", Icon = "newspaper"}) do
             end
         end
     })
+
+    Strategies:Section({Title = "Other Strategies"})
+    Strategies:Toggle({
+        Title = "Hardcore Mode",
+        Desc = "Skill tree: Not needed\n\nTowers:\nFarm,\nGolden Scout,\nDJ Booth,\nCommander,\nElectroshocker,\nRanger,\nFreezer,\nGolden Minigunner",
+        Value = _G.Hardcore,
+        Callback = function(v)
+            set_setting("Hardcore", v)
+
+            if v then
+                task.spawn(function()
+                    local url = "https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Strategies/Hardcore.lua"
+                    local content = game:HttpGet(url)
+                    
+                    while not (TDS and TDS.Loadout) do
+                        task.wait(0.5) 
+                    end
+                    
+                    local func, err = loadstring(content)
+                    if func then
+                        func() 
+                        Window:Notify({ Title = "ADS", Desc = "Running...", Time = 3 })
+                    end
+                end)
+            end
+        end
+    })
 end
 
 Window:Line()
