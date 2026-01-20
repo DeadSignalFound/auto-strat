@@ -933,7 +933,7 @@ local Strategies = Window:Tab({Title = "Strategies", Icon = "newspaper"}) do
 
     Strategies:Toggle({
         Title = "Fallen Mode",
-        Desc = "Skill tree: MAX\n\nTowers:\nGolden Scout,\nBrawler,\nMercenary Base,\nElectroshocker,\nEngineer",
+        Desc = "Skill tree: Not needed\n\nTowers:\nGolden Scout,\nBrawler,\nMercenary Base,\nElectroshocker,\nEngineer",
         Value = _G.Fallen,
         Callback = function(v)
             set_setting("Fallen", v)
@@ -941,6 +941,58 @@ local Strategies = Window:Tab({Title = "Strategies", Icon = "newspaper"}) do
             if v then
                 task.spawn(function()
                     local url = "https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Strategies/Fallen.lua"
+                    local content = game:HttpGet(url)
+                    
+                    while not (TDS and TDS.Loadout) do
+                        task.wait(0.5) 
+                    end
+                    
+                    local func, err = loadstring(content)
+                    if func then
+                        func() 
+                        Window:Notify({ Title = "ADS", Desc = "Running...", Time = 3 })
+                    end
+                end)
+            end
+        end
+    })
+
+    Strategies:Toggle({
+        Title = "Intermediate Mode",
+        Desc = "Skill tree: Not needed\n\nTowers:\nShotgunner,\nCrook Boss",
+        Value = _G.Intermediate,
+        Callback = function(v)
+            set_setting("Intermediate", v)
+
+            if v then
+                task.spawn(function()
+                    local url = "https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Strategies/Intermediate.lua"
+                    local content = game:HttpGet(url)
+                    
+                    while not (TDS and TDS.Loadout) do
+                        task.wait(0.5) 
+                    end
+                    
+                    local func, err = loadstring(content)
+                    if func then
+                        func() 
+                        Window:Notify({ Title = "ADS", Desc = "Running...", Time = 3 })
+                    end
+                end)
+            end
+        end
+    })
+
+    Strategies:Toggle({
+        Title = "Casual Mode",
+        Desc = "Skill tree: Not needed\n\nTowers:\nShotgunner",
+        Value = _G.Casual,
+        Callback = function(v)
+            set_setting("Casual", v)
+
+            if v then
+                task.spawn(function()
+                    local url = "https://raw.githubusercontent.com/DuxiiT/auto-strat/refs/heads/main/Strategies/Casual.lua"
                     local content = game:HttpGet(url)
                     
                     while not (TDS and TDS.Loadout) do
