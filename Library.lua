@@ -106,7 +106,7 @@ local default_settings = {
     AutoSkip = false,
     AutoChain = false,
     AutoDJ = false,
-    AutoRejoin = false,
+    AutoRejoin = true,
     SellFarms = false,
     AutoMercenary = false,
     AutoMilitary = false,
@@ -181,7 +181,11 @@ local function load_settings()
         
         if success and type(data) == "table" then
             for key, default_val in pairs(default_settings) do
-                _G[key] = (data[key] ~= nil) and data[key] or default_val
+                if data[key] ~= nil then
+                    _G[key] = data[key]
+                else
+                    _G[key] = default_val
+                end
             end
             return
         end
@@ -1223,6 +1227,40 @@ local Settings = Window:Tab({Title = "Settings", Icon = "settings"}) do
         end
     })
 
+    Settings:Button({
+        Title = "Test Webhook",
+        Callback = function()
+            if not _G.WebhookURL or _G.WebhookURL == "" then
+                return Window:Notify({Title = "Error", Desc = "Webhook URL is empty!", Time = 3, Type = "error"})
+            end
+
+            local success, response = pcall(function()
+                return send_request({
+                    Url = _G.WebhookURL,
+                    Method = "POST",
+                    Headers = { ["Content-Type"] = "application/json" },
+                    Body = game:GetService("HttpService"):JSONEncode({["content"] = "Webhook Test"})
+                })
+            end)
+
+            if success and response.StatusCode >= 200 and response.StatusCode < 300 then
+                Window:Notify({
+                    Title = "ADS",
+                    Desc = "Webhook sent successfully and is working!",
+                    Time = 3,
+                    Type = "normal"
+                })
+            else
+                Window:Notify({
+                    Title = "Error",
+                    Desc = "Invalid Webhook, Discord returned an error.",
+                    Time = 5,
+                    Type = "error"
+                })
+            end
+        end
+    })
+
     Settings:Textbox({
         Title = "Webhook URL:",
         Desc = "",
@@ -1419,6 +1457,8 @@ local function handle_post_match()
         return
     end
 
+    task.wait(1)
+    
     local match = get_all_rewards()
 
     current_total_coins += match.Coins
