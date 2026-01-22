@@ -1023,7 +1023,7 @@ local Misc = Window:Tab({Title = "Misc", Icon = "box"}) do
         Desc = "This will drop everyones FPS to like 5 (you will not be able to see this unless you have an alt)",
         Value = false,
         Callback = function(v)
-            local sticker_spam = v
+            sticker_spam = v
             
             if sticker_spam then
                 task.spawn(function()
