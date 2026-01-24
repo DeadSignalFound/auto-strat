@@ -128,6 +128,7 @@ local default_settings = {
     MercenaryPath = false,
     AutoSkip = false,
     AutoChain = false,
+    SupportCaravan = false,
     AutoDJ = false,
     AutoRejoin = true,
     SellFarms = false,
@@ -240,20 +241,23 @@ local function apply_3d_rendering()
     else
         run_service:Set3dRenderingEnabled(true)
     end
-    local core_gui = game:GetService("CoreGui")
-    local gui = core_gui:FindFirstChild("ADS_BlackScreen")
+    local player_gui = local_player:FindFirstChild("PlayerGui")
+    local gui = player_gui and player_gui:FindFirstChild("ADS_BlackScreen")
     if _G.Disable3DRendering then
-        if not gui then
+        if player_gui and not gui then
             gui = Instance.new("ScreenGui")
             gui.Name = "ADS_BlackScreen"
             gui.IgnoreGuiInset = true
             gui.ResetOnSpawn = false
-            gui.Parent = core_gui
+            gui.DisplayOrder = -1000
+            gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+            gui.Parent = player_gui
             local frame = Instance.new("Frame")
             frame.Name = "Cover"
             frame.BackgroundColor3 = Color3.new(0, 0, 0)
             frame.BorderSizePixel = 0
             frame.Size = UDim2.fromScale(1, 1)
+            frame.ZIndex = 0
             frame.Parent = gui
         end
         gui.Enabled = true
@@ -909,6 +913,15 @@ local Autostrat = Window:Tab({Title = "Autostrat", Icon = "star"}) do
         Value = _G.AutoChain,
         Callback = function(v)
             set_setting("AutoChain", v)
+        end
+    })
+
+    Autostrat:Toggle({
+        Title = "Support Caravan",
+        Desc = "Uses Commander Support Caravan",
+        Value = _G.SupportCaravan,
+        Callback = function(v)
+            set_setting("SupportCaravan", v)
         end
     })
 
@@ -3378,7 +3391,7 @@ local function start_auto_chain()
                 local replicator = current_commander:FindFirstChild("TowerReplicator")
                 local upgrade_level = replicator and replicator:GetAttribute("Upgrade") or 0
 
-                if upgrade_level >= 4 then
+                if upgrade_level >= 4 and _G.SupportCaravan then
                     remote_func:InvokeServer(
                         "Troops",
                         "Abilities",
