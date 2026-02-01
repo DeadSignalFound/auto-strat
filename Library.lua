@@ -3648,7 +3648,6 @@ local function start_auto_necro()
                 local now = os.clock()
 
                 if maxGraves and graveCount >= maxGraves and (now - lastActivation >= debounce) then
-                    print("AutoNecro Activating! Graves: " .. tostring(graveCount) .. "/" .. tostring(maxGraves))
                     local response = remote_func:InvokeServer(
                         "Troops",
                         "Abilities",
