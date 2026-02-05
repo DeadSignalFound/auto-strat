@@ -592,9 +592,6 @@ return function(ctx)
 
         if has_hook then
             Globals.__tds_recorder_handler = function(remote, method, args)
-                if checkcaller and checkcaller() then
-                    return
-                end
                 handle_namecall(remote, method, args)
             end
 
