@@ -102,6 +102,8 @@ local AntiLagRunning = false
 local AutoChainRunning = false
 local AutoDjRunning = false
 local AutoNecroRunning = false
+local TimeScaleRunning = false
+local TimeScaleNoTicketsWarned = false
 local AutoMercenaryBaseRunning = false
 local AutoMilitaryBaseRunning = false
 local SellFarmsRunning = false
@@ -132,6 +134,8 @@ local DefaultSettings = {
     AutoDJ = false,
     AutoNecro = false,
     AutoRejoin = true,
+    TimeScaleEnabled = false,
+    TimeScaleValue = 2,
     SellFarms = false,
     AutoMercenary = false,
     AutoMilitary = false,
@@ -159,6 +163,34 @@ local DefaultSettings = {
     tagName = "None",
     Modifiers = {}
 }
+
+local TimeScaleValues = {0.5, 1, 1.5, 2}
+
+local function NormalizeTimeScaleValue(val)
+    val = tonumber(val)
+    if not val then
+        return nil
+    end
+    for _, v in ipairs(TimeScaleValues) do
+        if v == val then
+            return v
+        end
+    end
+    return nil
+end
+
+local function CoerceTimeScaleValue(val, fallback)
+    return NormalizeTimeScaleValue(val) or fallback
+end
+
+local function GetTimescaleFrame()
+    local hotbar = PlayerGui:FindFirstChild("ReactUniversalHotbar")
+    local frame = hotbar and hotbar:FindFirstChild("Frame")
+    return frame and frame:FindFirstChild("timescale")
+end
+
+local StartTimeScale
+local ApplyTimeScaleOnce
 
 local LastState = {}
 
@@ -241,6 +273,9 @@ end
 
 local function SetSetting(name, value)
     if DefaultSettings[name] ~= nil then
+        if name == "TimeScaleValue" then
+            value = CoerceTimeScaleValue(value, Globals.TimeScaleValue or 2)
+        end
         Globals[name] = value
         SaveSettings()
     end
@@ -280,6 +315,7 @@ local function Apply3dRendering()
 end
 
 LoadSettings()
+Globals.TimeScaleValue = CoerceTimeScaleValue(Globals.TimeScaleValue, 2)
 Apply3dRendering()
 
 local isTagChangerRunning = false
@@ -950,6 +986,34 @@ local Autostrat = Window:Tab({Title = "Autostrat", Icon = "star"}) do
         Value = Globals.AutoNecro,
         Callback = function(v)
             SetSetting("AutoNecro", v)
+        end
+    })
+
+    Autostrat:Section({Title = "TimeScale"})
+    Autostrat:Toggle({
+        Title = "Enable TimeScale",
+        Desc = "Unlocks and sets game speed using tickets",
+        Value = Globals.TimeScaleEnabled,
+        Callback = function(v)
+            SetSetting("TimeScaleEnabled", v)
+            if v then
+                StartTimeScale()
+            end
+        end
+    })
+
+    Autostrat:Dropdown({
+        Title = "TimeScale Speed",
+        Desc = "Choose: 0.5, 1, 1.5, 2",
+        List = {"0.5", "1", "1.5", "2"},
+        Value = tostring(Globals.TimeScaleValue or 2),
+        Callback = function(choice)
+            local selected = type(choice) == "table" and choice[1] or choice
+            local value = CoerceTimeScaleValue(selected, Globals.TimeScaleValue or 2)
+            SetSetting("TimeScaleValue", value)
+            if Globals.TimeScaleEnabled then
+                ApplyTimeScaleOnce()
+            end
         end
     })
 
@@ -2531,6 +2595,55 @@ local function UnlockSpeedTickets()
     end
 end
 
+ApplyTimeScaleOnce = function()
+    if not Globals.TimeScaleEnabled or GameState ~= "GAME" then
+        return
+    end
+
+    local frame = GetTimescaleFrame()
+    if not frame or not frame.Visible then
+        return
+    end
+
+    local desired = CoerceTimeScaleValue(Globals.TimeScaleValue, 2)
+    if not desired then
+        return
+    end
+
+    local lock = frame:FindFirstChild("Lock")
+    if lock and lock.Visible then
+        if LocalPlayer.TimescaleTickets.Value < 1 then
+            if not TimeScaleNoTicketsWarned then
+                Logger:Log("No timescale tickets left")
+                TimeScaleNoTicketsWarned = true
+            end
+            return
+        end
+        UnlockSpeedTickets()
+        task.wait(0.4)
+    else
+        TimeScaleNoTicketsWarned = false
+    end
+
+    SetGameTimescale(desired)
+end
+
+StartTimeScale = function()
+    if TimeScaleRunning or not Globals.TimeScaleEnabled then
+        return
+    end
+    TimeScaleRunning = true
+
+    task.spawn(function()
+        while Globals.TimeScaleEnabled do
+            ApplyTimeScaleOnce()
+            task.wait(3)
+        end
+        TimeScaleNoTicketsWarned = false
+        TimeScaleRunning = false
+    end)
+end
+
 -- // ingame control
 local function TriggerRestart()
     local UiRoot = PlayerGui:WaitForChild("ReactGameNewRewards")
@@ -3653,6 +3766,10 @@ task.spawn(function()
         
         if Globals.AutoSkip and not AutoSkipRunning then
             StartAutoSkip()
+        end
+
+        if Globals.TimeScaleEnabled and not TimeScaleRunning then
+            StartTimeScale()
         end
 
         if Globals.AutoChain and not AutoChainRunning then
